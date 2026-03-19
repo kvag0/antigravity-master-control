@@ -76,6 +76,14 @@ Write a structured summary for `@Project_Manager` using the Handoff Format below
 ## Module Definitions
 [Table: Module Name | Responsibility | Inputs | Outputs | Dependencies]
 
+The Inputs and Outputs columns must be concrete. Use actual data shapes, not vague labels. For example: `{ title: string, body: string, language: string, tags: string[] }` not "snippet data".
+
+## API Contract
+[Required for any project with a backend API. If the project has no API, write "N/A".]
+[Table: Method | Path | Auth Required | Request Body | Response Data]
+
+Every route the system exposes must appear in this table. Request Body and Response Data must use concrete field names and types, not vague descriptions. This table is the contract `@Senior_Dev` implements and `@QA_Specialist` tests against — ambiguity here causes drift in both.
+
 ## Data Flow
 [Step-by-step trace of the primary use case. Use plain text, not diagrams.]
 
@@ -87,6 +95,8 @@ Write a structured summary for `@Project_Manager` using the Handoff Format below
 
 ## Known Risks
 [2 risks identified in Step 6 and their mitigations.]
+
+Standard risk to always include for server applications: The server entry point must initialise all stateful resources — database connections, config validation, secret checks — before calling the server start function. Any resource initialised after the server starts accepting connections creates a race condition. Flag this explicitly in the blueprint and instruct `@Senior_Dev` to enforce this order in the entry point file.
 
 ## Open Questions
 [Any ambiguities that @Senior_Dev or @Project_Manager must resolve before building.]

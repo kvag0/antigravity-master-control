@@ -84,6 +84,20 @@ Before writing any files, review each planned hydration against this checklist. 
 - [ ] Are all three objectives concrete enough that a yes/no answer can be given on completion?
 - [ ] Does the hydration add anything beyond what is already in the agent's Core Objectives?
 
+**CRITICAL — Output gate:** Before proceeding to Step 5, explicitly output the checklist results for every agent in this format:
+
+```
+HYDRATION QUALITY CHECK — @[AgentName]
+[ ] Overview includes stack and deployment target: PASS / FAIL
+[ ] Each objective names a specific file, function, or feature: PASS / FAIL
+[ ] No objective contradicts Core Objectives or Constraints: PASS / FAIL
+[ ] All three objectives are yes/no testable on completion: PASS / FAIL
+[ ] Hydration adds content beyond Core Objectives: PASS / FAIL
+Overall: PASS / FAIL — [proceed to file creation / rewrite required]
+```
+
+A single FAIL on any item means the hydration must be rewritten before any file is created. Do not proceed to Step 5 until every agent shows all PASS. This output is mandatory — skipping it is not permitted.
+
 ## Step 5 — File Creation
 
 For each agent, create the hydrated file at `/project_agents/@AgentName.md`.

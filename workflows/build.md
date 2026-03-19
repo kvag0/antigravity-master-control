@@ -9,6 +9,7 @@
 Confirm `architectural_blueprint.md` is present in the current context. If it is not, stop and ask the user to provide it with `@architectural_blueprint.md`.
 
 Read the blueprint in full. Then confirm all of the following before proceeding:
+
 - The blueprint contains a complete Module Definitions table.
 - There are no unresolved Open Questions in the blueprint.
 - `project_state.md` shows Overall Status as `"ON TRACK"` or `"AT RISK"` (not `"BLOCKED"`).
@@ -23,6 +24,7 @@ If any check fails, stop and report the specific failure to the user. Do not pro
 Before writing any code, decompose the blueprint into an ordered list of atomic implementation tasks. Output this list explicitly.
 
 Each task must follow this format:
+
 ```
 T-[ID]: [File to create or modify]
   Implements: [Module name from blueprint]
@@ -30,7 +32,7 @@ T-[ID]: [File to create or modify]
   Acceptance: [One-sentence definition of done]
 ```
 
-Do not proceed until the full task list is output. This list drives the implementation sequence.
+After producing the task list, cross-reference it against the Module Definitions table in the blueprint. Every module listed in that table must have at least one corresponding task. If any module is missing a task, add it before proceeding. Do not proceed until the full task list is output and the cross-reference check is complete.
 
 ---
 
@@ -39,8 +41,9 @@ Do not proceed until the full task list is output. This list drives the implemen
 Invoke `@Senior_Dev` to implement tasks in dependency order, one at a time.
 
 For each task:
+
 - `@Senior_Dev` implements the task and outputs the complete file with no truncation.
-- `@Senior_Dev` must run their 5-point self-review and include the result in their Handoff Format output.
+- `@Senior_Dev` must run their 5-point self-review and output their full Handoff Format block including the self-review result. This block must appear in the conversation before QA begins. If it is missing, QA does not start — request the handoff block first.
 - If `@Senior_Dev` triggers an escalation condition (blueprint gap, security risk, scope too large), stop. Do not proceed to QA. Resolve the escalation with the user first.
 
 Do not batch tasks. One task completes fully before the next begins.
@@ -53,12 +56,16 @@ After each task implementation, invoke `@QA_Specialist` to review the completed 
 
 `@QA_Specialist` must run their full Chain of Thought and produce a QA report for the task. The review must cover happy path, sad path, and at minimum two edge cases.
 
+**CRITICAL:** `@QA_Specialist` must append their findings to `qa_report.md` after each task. This file must exist and contain at least one entry before the Hard Stop message is permitted. If `qa_report.md` does not exist, the workflow has not completed — the Orchestrator must not issue the completion message under any circumstances.
+
 **If QA Verdict is PASS or PASS WITH CONDITIONS:**
+
 - Log the result in `project_state.md`.
 - Conditions must be addressed before the next dependent task begins, but do not require a full `/plan` restart.
 - Proceed to the next task in the list.
 
 **If QA Verdict is FAIL:**
+
 - Stop immediately. Do not proceed to the next task.
 - `@Senior_Dev` receives the QA report and fixes only the specific bugs listed. No other changes.
 - `@QA_Specialist` re-reviews the fixed code. This loop runs a maximum of two times.
@@ -70,6 +77,7 @@ After each task implementation, invoke `@QA_Specialist` to review the completed 
 ## STEP 5 — Final State Update
 
 After all tasks are complete and have passed QA, invoke `@Project_Manager` to:
+
 - Set Current Milestone to `"Implementation Complete"`.
 - Mark all tasks in the Task Queue as `DONE`.
 - Log all `@Senior_Dev` implementation decisions in the Decision Log.
@@ -89,4 +97,5 @@ The following actions are strictly forbidden after Step 5:
 - Do NOT proceed to any next phase without explicit user instruction.
 
 **Final output (required, verbatim):**
+
 > "Implementation complete. All tasks have passed QA. Review the code and `project_state.md`, then type `/audit` to run a full security and quality review."

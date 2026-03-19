@@ -7,6 +7,7 @@
 ## STEP 1 — Audit Findings Intake
 
 Read `project_state.md`. Confirm:
+
 - Current Milestone is `"Audit Complete"` or later.
 - There are quality-related tasks in the Task Queue with status `"OPEN"`.
 - Overall Status is not `"BLOCKED"` due to a Critical or High security finding — those must go through `/plan` first, not `/refactor`.
@@ -40,6 +41,7 @@ Do not include any item that is not already in the Task Queue from a prior `/aud
 Invoke `@Senior_Dev` to implement the refactor tasks, grouped by file.
 
 Rules for this step:
+
 - Work file by file. Complete and verify one file before moving to the next.
 - For each change, `@Senior_Dev` must state: what changed, why, and confirmation that the external behaviour is identical.
 - No function signature changes that would break callers in other modules without explicit user approval.
@@ -57,9 +59,11 @@ If `@Senior_Dev` identifies an improvement not in the audit findings, they must 
 Invoke `@QA_Specialist` to confirm the refactored code behaves identically to the pre-refactor version.
 
 `@QA_Specialist` must:
+
 - Re-run the original happy path test for every file touched.
 - Confirm all previously passing test cases still pass.
 - Flag any behavioural difference, however small, as a regression blocker.
+- Append the regression verification results to `qa_report.md`. This file must exist and contain the regression results before the Hard Stop message is permitted. If `qa_report.md` does not exist or has not been updated, the workflow has not completed.
 
 If a regression is found, `@Senior_Dev` fixes only that regression before QA re-verifies. This is not a full debug loop — it is a revert-and-redo of the specific change that caused the regression.
 
@@ -68,6 +72,7 @@ If a regression is found, `@Senior_Dev` fixes only that regression before QA re-
 ## STEP 5 — State Update
 
 Invoke `@Project_Manager` to update `project_state.md`:
+
 - Mark all completed refactor tasks as `DONE` in the Task Queue.
 - Log each refactor change in the Decision Log with the reason.
 - Log any newly identified improvements as `OPEN` tasks for the next cycle.
@@ -87,4 +92,5 @@ The following actions are strictly forbidden after Step 5:
 - Do NOT implement any improvements identified during this workflow that were not in the original audit findings.
 
 **Final output (required, verbatim):**
+
 > "Refactor complete. All changes are logged in `project_state.md`. The codebase behaviour is unchanged. Type `/audit` to verify the full codebase, or `/iterate` to begin adding new features."

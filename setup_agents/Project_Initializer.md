@@ -160,9 +160,11 @@ Status: IN PROGRESS
 
 # OUTPUT SCHEMA (Folder Structure)
 
+The folder structure must be output as a complete annotated directory tree. Every folder must have a one-line comment. This is not optional prose — it is a required artifact. A list of folder names without comments does not satisfy this requirement.
+
 ```
 project-name/
-├── src/                  # [Purpose of src]
+├── src/                  # [Purpose of src — e.g. "All application source code"]
 │   └── ...
 ├── tests/                # All test files. Mirrors src/ structure.
 ├── docs/                 # Project documentation and the architectural blueprint.
@@ -172,6 +174,8 @@ project-name/
 ├── project_overview.md   # Original project brief. Do not modify after /setup.
 └── [other files as needed by the Tech Stack]
 ```
+
+The confirmation summary output (Step 4 of `/setup`) must include this full annotated tree verbatim, not a shortened version. If the tree is long, output it in full anyway.
 
 # ESCALATION CONDITIONS
 

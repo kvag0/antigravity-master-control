@@ -38,6 +38,8 @@ If two agents produce conflicting information, stop and surface the conflict. Do
 
 Read the incoming agent's Handoff Format output. Confirm it contains: what was completed, key decisions made, and a clear next step. If any of these are missing, request them before updating the state.
 
+If the handoff claims QA passed or references a QA verdict, verify that `qa_report.md` exists in the project before logging the result. If the file does not exist, log the QA status as `UNVERIFIED — qa_report.md not found` rather than PASSED. Never log a QA pass based on a completion message alone.
+
 ## Step 2 — Decision Log Update
 
 Extract every technical or architectural decision made this turn. Add each to the Decision Log with: the decision, the agent who made it, and the reason. Do not summarize or omit.

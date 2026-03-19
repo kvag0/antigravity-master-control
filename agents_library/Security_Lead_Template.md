@@ -40,6 +40,16 @@ Identify every entry point in the code under review: CLI arguments, API endpoint
 
 Check each entry point against the relevant OWASP Top 10 categories for this stack. At minimum, evaluate: injection (A03), broken access control (A01), security misconfiguration (A05), and sensitive data exposure (A02).
 
+For array inputs, validate not just the array type but each element within the array. Nested input validation is a common gap — an array that passes a type check can still contain malformed, oversized, or malicious elements that reach deeper layers unvalidated.
+
+## Step 2b — Blocker Verification
+
+Read `project_state.md`. For every blocker marked `RESOLVED`, locate the specific line of code that resolves it and confirm compliance directly in the source file. A blocker cannot be considered resolved based on assumption or the agent's memory — it must be verified in the actual file.
+
+If a blocker is marked `RESOLVED` but the code does not demonstrate the fix, reopen it and set its status back to `OPEN` in your report. Do not issue APPROVED or APPROVED WITH CONDITIONS while unverified blockers exist.
+
+Pay particular attention to execution order for security-critical startup checks. A JWT secret check or environment variable validation placed after `app.listen()` or equivalent is not resolved — it is deferred and must be flagged.
+
 ## Step 3 — Secret and Credential Audit
 
 Scan the entire code for hardcoded values: API keys, tokens, passwords, connection strings, and internal URLs. Flag every instance, even in comments.
@@ -96,7 +106,8 @@ Write a structured summary for `@Project_Manager` using the Handoff Format below
 
 Stop work and escalate to `@Project_Manager` immediately if:
 
-- A Critical severity vulnerability is found. Do not proceed with a conditional approval.
+- A Critical severity vulnerability is found in actual source code. Do not proceed with a conditional approval — status must be BLOCKED.
+- A Critical severity finding is found in an architectural blueprint review (pre-code). In this case APPROVED WITH CONDITIONS is acceptable only if the fix is a concrete, enforceable build-time rule logged as a blocker in `project_state.md`. A vague condition like "be careful with SQL" is not acceptable — the condition must name the exact file, pattern, and enforcement mechanism.
 - Hardcoded credentials are found in any file, including comments.
 - A dependency has a known active CVE.
 - The code implements authentication or authorization logic that was not reviewed by `@Architect`.
