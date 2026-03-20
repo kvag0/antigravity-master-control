@@ -9,6 +9,7 @@
 The user must provide the n8n workflow JSON before this workflow proceeds. If not provided, ask for it.
 
 Once provided, confirm:
+
 - The JSON is valid and parseable.
 - The workflow has at least one trigger node.
 - There are no disconnected nodes (nodes with no connections).
@@ -25,15 +26,15 @@ Invoke `@N8N_Specialist` to run the full Convert Chain of Thought steps 1 throug
 
 Node Inventory → Execution Graph → Expression Translation → Architecture Decision → Type Definitions
 
-`@N8N_Specialist` must output all five artifacts explicitly before any code is written:
+`@N8N_Specialist` must write all five artifacts directly into `conversion_report.md` under clearly labelled sections before any code is produced. A separate analysis file is not acceptable — the report must be a single traceable document from analysis through to equivalence check. The five required sections are:
 
-1. The complete Node Inventory table
-2. The plain-text Execution Graph
-3. The Expression Translation Map
-4. The Architecture Decision with justification
-5. All type definitions (interfaces or dataclasses/Pydantic models)
+1. `## Node Inventory` — full table
+2. `## Execution Graph` — plain-text directed graph
+3. `## Expression Translation Map` — full table
+4. `## Architecture Decision` — chosen architecture with justification
+5. `## Type Definitions` — all interfaces or dataclasses
 
-Do not proceed to Step 3 until all five are present. Code written without a clear execution graph and type definitions will be structurally wrong.
+Do not proceed to Step 3 until all five sections exist in `conversion_report.md`. Code written without a clear execution graph and type definitions will be structurally wrong.
 
 If `@N8N_Specialist` triggers an escalation condition (complex Function node JavaScript, OAuth credentials, 30+ node workflow, stateful loop with no async equivalent), stop and surface it to the user. Agree on how to handle it before proceeding.
 
@@ -44,6 +45,7 @@ If `@N8N_Specialist` triggers an escalation condition (complex Function node Jav
 `@N8N_Specialist` implements the converted code following Convert Steps 6 and 7.
 
 Requirements:
+
 - Code must follow the architecture decided in Step 2.
 - All types from Step 2 must be used — no untyped dicts in Python, no `any` in TypeScript.
 - Every external call must have an explicit timeout.
@@ -63,6 +65,7 @@ If the workflow has database nodes, the converted code must use a typed database
 `@N8N_Specialist` runs Convert Step 7: trace the primary execution path through both the original workflow and the converted code.
 
 The equivalence check must confirm each of the following in writing:
+
 - Trigger input is handled identically
 - Each data transformation produces the same output shape
 - Each external call targets the same endpoint with the same payload
@@ -77,6 +80,7 @@ Any deviation must be listed explicitly in the Deviations section with the reaso
 Invoke `@QA_Specialist` to review the converted code.
 
 `@QA_Specialist` must focus on:
+
 - Does the happy path produce the same result as the original workflow would?
 - Are there input shapes that the converted code handles differently than n8n would?
 - Are all error paths reachable and correctly handled?
@@ -107,6 +111,7 @@ Every file must be complete. The `.env.example` must list every environment vari
 ## STEP 7 — State Update
 
 Invoke `@Project_Manager` to update `project_state.md`:
+
 - Log the original workflow name, target language, node count, and architecture choice.
 - Log any deviations from the original workflow in the Decision Log.
 - Log any Function node JavaScript that required manual translation as a task for human review.
@@ -125,4 +130,5 @@ The following actions are strictly forbidden after Step 7:
 - Do NOT proceed to `/build`, `/audit`, or any other workflow automatically.
 
 **Final output (required, verbatim):**
+
 > "Conversion complete. Review `conversion_report.md` for the equivalence check and any deviations from the original workflow. Install dependencies, configure `.env`, and run the entry point to verify behaviour matches the original n8n workflow."

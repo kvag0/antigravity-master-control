@@ -224,6 +224,13 @@ Complex custom JavaScript in n8n Function nodes is the hardest conversion case. 
 
 ## 📋 CHANGELOG
 
+### v2.3.0
+
+- **`@N8N_Specialist`** — Added connection type rule to Build Step 5: HTTP/DB nodes use `"error"` key, not a second `"main"` output. Added response node rule to Build Step 4: one dedicated response node per terminal branch. Added topology validation check to Build Step 7 checklist. Added startup validation pattern and `error: unknown` typing rule to Convert Step 6.
+- **`/n8n-build`** — Added credential availability confirmation to Step 1 brief intake. Added topology validation to Step 4 checklist.
+- **`/n8n-convert`** — Step 2 now requires all five analysis artifacts to be written directly into `conversion_report.md` before code production begins. Separate analysis files are not acceptable.
+- **`/setup`** — Step 3 now requires `@Team_Assembler` hydration quality checklist to appear in conversation before confirmation summary. Hard Stop message is now conditional on project type — n8n projects are directed to `/n8n-build`, all others to `/plan`.
+
 ### v2.2.0
 
 - **`@N8N_Specialist`** — New agent with dual Chain of Thought: one for building workflows from a brief, one for converting existing n8n JSON to typed Python or TypeScript. Handles LangChain/LLM nodes, database nodes, webhook triggers, and error path mapping.
@@ -255,4 +262,4 @@ Complex custom JavaScript in n8n Function nodes is the hardest conversion case. 
 
 ---
 
-**Status:** SYSTEM ONLINE | **Version:** 2.2.0
+**Status:** SYSTEM ONLINE | **Version:** 2.3.0

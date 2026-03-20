@@ -13,8 +13,9 @@ The user must provide a workflow brief before this workflow proceeds. If not pro
 - What external services does it call? (APIs, databases, LLMs, etc.)
 - What should happen when something fails?
 - What credentials or environment variables are available?
+- **Are all required credentials already configured in your n8n instance?** List each one and confirm it exists. Any credential not yet configured must be noted in the Credential Manifest as `STATUS: NOT CONFIGURED` and flagged in the final output message.
 
-Do not proceed without a clear answer to all five. Vague briefs produce broken workflows.
+Do not proceed without a clear answer to all six. Vague briefs produce broken workflows. Unconfigured credentials produce workflows that fail on first execution.
 
 Read `project_state.md` if it exists. If this workflow is part of a larger project, confirm the trigger and data shapes are consistent with the existing architecture.
 
@@ -37,6 +38,7 @@ If `@N8N_Specialist` triggers an escalation condition (malformed brief, OAuth cr
 `@N8N_Specialist` produces the complete `workflow.json`.
 
 Requirements:
+
 - Every node defined in the Node Map must appear in the JSON.
 - Every node must be connected — no orphaned nodes.
 - All expressions must use valid n8n syntax.
@@ -60,6 +62,7 @@ Before outputting the final JSON, `@N8N_Specialist` must verify:
 - [ ] No hardcoded credentials or secrets appear anywhere in the JSON
 - [ ] The credential manifest lists every external service the workflow touches
 - [ ] All three test cases are written and cover: happy path, missing/invalid input, external service failure
+- [ ] For every node in `connections{}`, the connection type (`"main"` vs `"error"`) matches what that node type actually supports. HTTP Request, Postgres, and similar action nodes produce one `"main"` output and one `"error"` output. Only IF nodes produce multiple `"main"` outputs. Flag any mismatch as a blocker before outputting.
 
 If any check fails, fix it before outputting. Do not output a workflow that fails validation.
 
@@ -68,6 +71,7 @@ If any check fails, fix it before outputting. Do not output a workflow that fail
 ## STEP 5 — State Update
 
 Invoke `@Project_Manager` to update `project_state.md`:
+
 - Log the workflow name, trigger type, and node count in the Decision Log.
 - Log the credential manifest as a task: "Configure credentials before running workflow."
 - Set Current Milestone to `"n8n Workflow Complete"`.
@@ -85,4 +89,5 @@ The following actions are strictly forbidden after Step 5:
 - Do NOT proceed to `/build` or any other workflow automatically.
 
 **Final output (required, verbatim):**
+
 > "The n8n workflow JSON is ready. Review the Node Map, Credential Manifest, and Test Cases before importing. Configure all required credentials in your n8n instance, then import `workflow.json`."
